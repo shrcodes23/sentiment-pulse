@@ -14,16 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analyses: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          id: string
+          input_text: string
+          keywords: string[] | null
+          negative_score: number
+          neutral_score: number
+          positive_score: number
+          sentiment_label: string
+          source_platform: string
+          user_id: string
+          word_count: number
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          id?: string
+          input_text: string
+          keywords?: string[] | null
+          negative_score?: number
+          neutral_score?: number
+          positive_score?: number
+          sentiment_label: string
+          source_platform?: string
+          user_id: string
+          word_count?: number
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          id?: string
+          input_text?: string
+          keywords?: string[] | null
+          negative_score?: number
+          neutral_score?: number
+          positive_score?: number
+          sentiment_label?: string
+          source_platform?: string
+          user_id?: string
+          word_count?: number
+        }
+        Relationships: []
+      }
+      batch_jobs: {
+        Row: {
+          created_at: string
+          filename: string
+          id: string
+          processed: number
+          status: string
+          total_count: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          id?: string
+          processed?: number
+          status?: string
+          total_count?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          id?: string
+          processed?: number
+          status?: string
+          total_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      batch_results: {
+        Row: {
+          confidence: number
+          created_at: string
+          id: string
+          job_id: string
+          row_text: string
+          sentiment_label: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number
+          created_at?: string
+          id?: string
+          job_id: string
+          row_text: string
+          sentiment_label: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          id?: string
+          job_id?: string
+          row_text?: string
+          sentiment_label?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "batch_results_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "batch_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +316,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

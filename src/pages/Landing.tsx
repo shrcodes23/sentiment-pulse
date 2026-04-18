@@ -1,14 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Card } from "@/components/ui/card";
 import { Zap, BarChart3, FileStack, ArrowRight, Sparkles } from "lucide-react";
 import { analyzeText, AnalyzeResult } from "@/lib/sentiment";
 import { SentimentBadge } from "@/components/sentiment/SentimentBadge";
 import { ScoreBreakdown } from "@/components/sentiment/ScoreBreakdown";
 import { useAuth } from "@/contexts/AuthContext";
+import { TiltCard } from "@/components/TiltCard";
+import heroImg from "@/assets/hero-sentiment.jpg";
+import featureRealtime from "@/assets/feature-realtime.jpg";
+import featureBatch from "@/assets/feature-batch.jpg";
+import featureTrends from "@/assets/feature-trends.jpg";
 
 const Landing = () => {
   const { user } = useAuth();

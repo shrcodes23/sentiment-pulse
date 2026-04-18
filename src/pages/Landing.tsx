@@ -164,4 +164,62 @@ const Landing = () => {
   );
 };
 
+/** Cursor-driven parallax hero visual with floating sentiment dots. */
+const ParallaxHero = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      setTilt({ x, y });
+    };
+    const onLeave = () => setTilt({ x: 0, y: 0 });
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  const t = (depth: number) => ({
+    transform: `translate3d(${tilt.x * depth}px, ${tilt.y * depth}px, 0)`,
+    transition: "transform 0.15s ease-out",
+  });
+
+  return (
+    <div
+      ref={ref}
+      className="relative aspect-square w-full overflow-hidden rounded-2xl border hairline bg-card"
+      style={{ perspective: "1000px" }}
+    >
+      <img
+        src={heroImg}
+        alt="Sentiment data visualization"
+        width={1280}
+        height={896}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={t(-12)}
+      />
+      {/* Floating sentiment chips */}
+      <div className="absolute left-[18%] top-[22%] glass-card px-3 py-1.5 text-xs flex items-center gap-1.5 backdrop-blur" style={t(-30)}>
+        <span className="h-1.5 w-1.5 rounded-full bg-positive" /> positive · 92%
+      </div>
+      <div className="absolute right-[14%] top-[40%] glass-card px-3 py-1.5 text-xs flex items-center gap-1.5 backdrop-blur" style={t(40)}>
+        <span className="h-1.5 w-1.5 rounded-full bg-negative" /> negative · 78%
+      </div>
+      <div className="absolute left-[32%] bottom-[18%] glass-card px-3 py-1.5 text-xs flex items-center gap-1.5 backdrop-blur" style={t(-22)}>
+        <span className="h-1.5 w-1.5 rounded-full bg-neutral" /> neutral · 64%
+      </div>
+      {/* Subtle vignette */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-background/40 via-transparent to-transparent" />
+    </div>
+  );
+};
+
 export default Landing;
